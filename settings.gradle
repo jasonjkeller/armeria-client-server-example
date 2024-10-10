@@ -1,0 +1,4 @@
+rootProject.name = 'armeria-client-server-example'
+
+include 'rest-api-annotated-service'
+include 'rest-api-web-client'
