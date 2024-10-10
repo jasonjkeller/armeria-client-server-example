@@ -1,4 +1,4 @@
-# Armeria OpenTelemetry + New Relic Instrumentation
+# Armeria OpenTelemetry Instrumentation + New Relic Java Agent
 This project includes a blog server and a client for making requests to the server, both of which are built using the [Armeria framework](https://armeria.dev/). 
 
 Both the client and server are instrumented by the [OpenTelemetry Armeria standalone instrumentation](https://github.com/open-telemetry/opentelemetry-java-instrumentation/tree/main/instrumentation/armeria/armeria-1.3).
