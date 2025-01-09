@@ -32,6 +32,7 @@ dependencies {
     implementation("io.opentelemetry:opentelemetry-sdk-extension-autoconfigure")
     implementation("io.opentelemetry:opentelemetry-sdk")
     implementation("io.opentelemetry:opentelemetry-exporter-logging")
+    implementation("io.opentelemetry:opentelemetry-exporter-otlp")
     implementation("io.opentelemetry.semconv:opentelemetry-semconv:1.27.0-alpha")
 
     implementation 'org.json:json:20240303'

@@ -8,7 +8,9 @@ import com.linecorp.armeria.common.HttpHeaderNames;
 import com.linecorp.armeria.common.HttpMethod;
 import com.linecorp.armeria.common.RequestHeaders;
 import com.newrelic.api.agent.Trace;
+import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.OpenTelemetry;
+import io.opentelemetry.api.metrics.LongCounter;
 import io.opentelemetry.instrumentation.armeria.v1_3.ArmeriaTelemetry;
 import io.opentelemetry.sdk.autoconfigure.AutoConfiguredOpenTelemetrySdk;
 import org.json.JSONException;
@@ -46,6 +48,8 @@ public final class Main {
 
         logger.info("HTTP WebClient has been created for {}.", uri);
 
+        LongCounter longCounter = GlobalOpenTelemetry.get().getMeterProvider().get("armeria-client").counterBuilder("armeria.new.client.counter").build();
+
         return wcb.factory(factory).build();
     }
 
@@ -74,6 +78,8 @@ public final class Main {
         }
 
         logResponse(response, "createBlogPost");
+
+        GlobalOpenTelemetry.get().getMeterProvider().get("armeria-client").histogramBuilder("armeria.client.create.blog.post").build();
     }
 
     // curl -XDELETE -H 'content-type: application/json; charset=utf-8' 'http://127.0.0.1:8080/blogs/0' -d '{}'
@@ -84,6 +90,9 @@ public final class Main {
         AggregatedHttpResponse response = client.execute(deleteJson).aggregate().join();
 
         logResponse(response, "deleteBlogPost");
+
+        GlobalOpenTelemetry.get().getMeterProvider().get("armeria-client").histogramBuilder("armeria.client.delete.blog.post").build();
+
     }
 
     // curl -XGET -H 'content-type: application/json; charset=utf-8' 'http://127.0.0.1:8080/blogs/0'
@@ -94,6 +103,8 @@ public final class Main {
         AggregatedHttpResponse response = client.execute(getJson).aggregate().join();
 
         logResponse(response, "getBlogPost");
+
+        GlobalOpenTelemetry.get().getMeterProvider().get("armeria-client").histogramBuilder("armeria.client.get.blog.post").build();
     }
 
     // curl -XGET -H 'content-type: application/json; charset=utf-8' 'http://127.0.0.1:8080/blogs'
@@ -104,6 +115,8 @@ public final class Main {
         AggregatedHttpResponse response = client.execute(getJson).aggregate().join();
 
         logResponse(response, "getBlogPosts");
+
+        GlobalOpenTelemetry.get().getMeterProvider().get("armeria-client").histogramBuilder("armeria.client.get.blog.posts").build();
     }
 
     // curl -XPUT -H 'content-type: application/json; charset=utf-8' 'http://127.0.0.1:8080/blogs/0' -d '{}'
@@ -114,6 +127,8 @@ public final class Main {
         AggregatedHttpResponse response = client.execute(putJson, "{\"title\":\"My first blog UPDATED\", \"content\":\"Hello Armeria!\"}").aggregate().join();
 
         logResponse(response, "updateBlogPost");
+
+        GlobalOpenTelemetry.get().getMeterProvider().get("armeria-client").histogramBuilder("armeria.client.update.blog.post").build();
     }
 
     public static void logResponse(AggregatedHttpResponse response, String method) {
